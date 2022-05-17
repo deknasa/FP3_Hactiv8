@@ -43,7 +43,7 @@ module.exports = {
         type: Sequelize.INTEGER,
         validate: {
           allowNull: false,
-          isIn: [['male', 'female']],
+          isIn: [['admin', 'customer']],
         }
       },
       balance: {
