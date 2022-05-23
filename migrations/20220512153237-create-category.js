@@ -10,13 +10,9 @@ module.exports = {
       },
       type: {
         type: Sequelize.STRING,
-        allowNull: false
       },
       sold_product_amount: {
         type: Sequelize.INTEGER,
-        allowNull: false,
-        isInt: true,
-        isNumeric: true
       },
       createdAt: {
         allowNull: false,
@@ -26,7 +22,20 @@ module.exports = {
         allowNull: false,
         type: Sequelize.DATE
       }
-    });
+    })
+    // .then(() =>
+    //   queryInterface.addConstraint("Categories", {
+    //     fields: ["id"],
+    //     type: "foreign key",
+    //     name: "user_fk",
+    //     references: {
+    //         table: "Users",
+    //         field: "id",
+    //     },
+    //     onDelete: "cascade",
+    //     onUpdate: "cascade",
+    //   })
+    // )
   },
   async down(queryInterface, Sequelize) {
     await queryInterface.dropTable('Categories');

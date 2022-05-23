@@ -6,14 +6,14 @@ module.exports = (sequelize, DataTypes) => {
   class User extends Model {
 
     static associate(models) {
-      // this.hasMany(models.category, {
+      // this.hasMany(models.Category, {
       //   as: "category",
-      //   foreignKey: id,
+      //   foreignKey: "id",
       // });
-      // this.hasMany(models.transactionhistory, {
-      //     as: "category",
-      //     foreignKey: "UserId",
-      // });
+      this.hasMany(models.TransactionHistory, {
+          as: "transactionhistory",
+          foreignKey: "UserId",
+      });
     }
   }
 
@@ -30,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
     email: {
       type: DataTypes.STRING,
       allowNull: false,
+      unique: {
+        args: true,
+        msg: 'Email address already in use. Try another one!'
+      },
       validate: {
         notEmpty: {
           args: true,
@@ -38,18 +42,6 @@ module.exports = (sequelize, DataTypes) => {
         isEmail: {
           args: true,
           msg: "email must be valid"
-        },
-        isUnique: (value, next) => {
-          User.findAll({
-            where: { email: value },
-            attributes: ['id'],
-          })
-          .then((user) => {
-            if (user.length != 0)
-              next(new Error("This email has been used, try another one"));
-            next();
-          })
-          .catch((onError) => console.log(onError));
         },
       }
     },
@@ -114,6 +106,10 @@ module.exports = (sequelize, DataTypes) => {
           args: true,
           msg: "balance is required"
         },
+        isInt: {
+          args: true,
+          msg: "balance must be integer"
+      }
       }
     },
   }, {
