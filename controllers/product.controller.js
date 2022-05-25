@@ -1,5 +1,3 @@
-const res = require('express/lib/response')
-
 const Product = require('../models/index').Product
 const Category = require('../models/index').Category
 
@@ -7,8 +5,8 @@ exports.postProduct = async (req, res) => {
     const { title, price, stock, category_id } = req.body
 
     await Category.findOne({ where: { id: category_id } })
-    .then(results => {
-        if (!results) {
+    .then(category => {
+        if (!category) {
             return res.status(400).json({
                 message: `no category data with category id ${category_id}`
             })
@@ -30,13 +28,13 @@ exports.postProduct = async (req, res) => {
         .catch(e => {
             console.log(e);
             res.status(403).send({
-                message: "INTERNAL SERVER ERROR",
+                message: "FAILED TO POST PRODUCT",
                 error: e.message
             })
         })
     })
     .catch(err => {
-        console.log(e);
+        console.log(err);
         res.status(503).send({
             message: "INTERNAL SERVER ERROR",
             error: err.message
@@ -120,7 +118,7 @@ exports.updateCategoryId = async (req, res) => {
         .then(product => {
             return res.status(200).send({
                 product: 
-                // results
+                // product
                 {
                     id: product[1][0].id,
                     title: product[1][0].title,
@@ -135,7 +133,7 @@ exports.updateCategoryId = async (req, res) => {
         .catch(e => {
             console.log(e);
             res.status(403).json({
-                message: "err",
+                message: "Fail",
                 error: e.message
             })
         })

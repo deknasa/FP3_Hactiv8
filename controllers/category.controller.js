@@ -20,8 +20,6 @@ exports.postCategory = async (req, res) => {
 }
 
 exports.getAllCategory = async (req, res) => {
-    // const id = req.id
-
     await Category.findAll({
         include: [{
             model: Product,
@@ -52,11 +50,12 @@ exports.updateCategory = async(req, res) => {
     })
     .then(category => { 
         res.status(200).json({ 
-            category: category[1][0] 
+            category: category[1][0]
+            // category: category
         }) 
     })
     .catch(error => {
-        res.status(500).json({ 
+        res.status(503).json({ 
             message: "INTERNAL SERVER ERROR", 
             error 
         });
@@ -69,7 +68,7 @@ exports.deleteCategory = async (req, res) => {
     await Category.destroy({ where: {id: categoryId} })
     .then(() => {
         res.status(200).json({
-            message: "Category has been succesfully deleted",
+            message: "Category has been successfully deleted",
         });
     })
     .catch(e => {

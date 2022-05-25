@@ -13,7 +13,7 @@ exports.register = async (req, res) => {
     .then(user => {
         if (user) {
             return res.status(400).send({
-                message: "Email or Username Already Exist"
+                message: "Email Already Exist"
             })
         }
         return User.create({
@@ -25,7 +25,7 @@ exports.register = async (req, res) => {
         })
         .then(user => {
             res.status(201).send({
-                data: {
+                user: {
                     id: user.id,
                     full_name: user.full_name,
                     email: user.email,
@@ -36,15 +36,13 @@ exports.register = async (req, res) => {
             })
         })
         .catch(e => {
-            console.log(e);
             res.status(403).send({
-                message: "FAIL REGISTER",
+                message: "FAILED TO REGISTER",
                 error: e.message
             })
         })
     })
     .catch(e => {
-        console.log(e);
         res.status(503).send({
             message: "INTERNAL SERVER ERROR",
             error: e.message
@@ -76,7 +74,7 @@ exports.login = async (req, res) => {
             id: user.id,
             email: user.email,
             role: user.role,
-            gender: user.gender
+            gender: user.gender,
         }
         const token = generateToken(data)
         res.status(200).send({
@@ -84,7 +82,6 @@ exports.login = async (req, res) => {
         })
     })
     .catch(e => {
-        console.log(e);
         res.status(503).send({
             message: "INTERNAL SERVER ERROR",
             error: e.message
@@ -106,7 +103,9 @@ exports.updateUser = async (req, res) => {
     })
     .then((user) => {
         res.status(200).json({
-            user: {
+            user: 
+            // user
+            {
                 id: user[1][0].id,
                 full_name: user[1][0].full_name,
                 email: user[1][0].email,
@@ -116,12 +115,45 @@ exports.updateUser = async (req, res) => {
         })
     })
     .catch(e => {
-        console.log(e);
         res.status(503).send({
             message: "INTERNAL SERVER ERROR",
             e: e.message
         })
     })
+}
+
+exports.topUp = async (req, res) => {
+    const balance = req.body.balance
+    const id = req.id
+
+    await User.findOne({
+        where: { id }
+    })
+    .then(user => {
+        const dataTopup = user.balance + balance
+        return User.update( {balance: dataTopup}, {
+            where: { id },
+            returning: true
+        })
+        .then(results => {
+            return res.status(200).send({
+                message: `Your balance has been successfully updated to Rp ${results[1][0].balance}`
+                // message: `Your balance has been successfully updated to Rp ${results}`
+            })
+        })
+        .catch(e => {
+            res.status(400).send({
+                message: "fail to update balance",
+                err: e.message
+            })
+        })
+    })
+    .catch(e => {
+        res.status(503).json({
+            message: "INTERNAL SERVER ERROR",
+            error: e.message,
+        });
+    });
 }
 
 exports.deleteUser = async (req, res) => {
@@ -141,36 +173,17 @@ exports.deleteUser = async (req, res) => {
     });
 }
 
-exports.topUp = async (req, res) => {
-    const balance = req.body.balance
-    const id = req.id
 
-    await User.findOne({
-        where: { id }
-    })
-    .then(user => {
-        const dataTopup = user.balance + balance
-        return User.update( {balance: dataTopup}, {
-            where: { id },
-            returning: true
+
+exports.usergetall = async(req, res) => {
+    await User.findAll().then(result => {
+        res.status(200).json({
+            result
         })
-        .then(results => {
-            return res.status(200).send({
-                message: `Your balance has been successfully updated to Rp ${results[1][0].balance}`
-            })
-        })
-        .catch(e => {
-            console.log(e);
-            res.status(400).send({
-                message: "fail to update balance",
-                err: e.message
-            })
-        })
-    })
-    .catch(e => {
-        res.status(503).json({
+    }).catch(error => {
+        res.status(500).json({
             message: "INTERNAL SERVER ERROR",
-            error: e.message,
-        });
-    });
+            error: error.message
+        })
+    })
 }

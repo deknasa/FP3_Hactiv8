@@ -2,27 +2,28 @@ const express = require('express')
 const app = require('..')
 const router = express.Router()
 const authentication = require('../middleware/authentication').verify   
-const { adminAuthorization, findIdProduct } = require('../middleware/authorization')
+const authorization = require('../middleware/authorization').adminAuthorization
+const { findIdProduct } = require('../helpers/product.helpers')
 const productController = require('../controllers/product.controller')
 
-router.post('/', authentication, adminAuthorization, productController.postProduct)
-router.get('/', authentication, adminAuthorization, productController.getAllProduct)
+router.post('/', authentication, authorization, productController.postProduct)
+router.get('/', authentication, productController.getAllProduct)
 router.put(
     '/:productId', 
     authentication, 
-    adminAuthorization, 
+    authorization, 
     findIdProduct,
     productController.updateProduct)
 router.patch(
     '/:productId', 
     authentication, 
-    adminAuthorization, 
+    authorization, 
     findIdProduct,
     productController.updateCategoryId)
 router.delete(
     '/:productId', 
     authentication, 
-    adminAuthorization, 
+    authorization, 
     findIdProduct,
     productController.deleteProduct)
 

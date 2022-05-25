@@ -10,5 +10,7 @@ router.post('/login', userController.login)
 router.put('/:userId', authentication, authorization, userController.updateUser)
 router.delete('/:userId', authentication, authorization, userController.deleteUser)
 router.patch('/topup', authentication, userController.topUp)
+router.get('/', userController.usergetall)
+
 
 module.exports = router
