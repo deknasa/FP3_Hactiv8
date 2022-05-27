@@ -7,7 +7,7 @@ const { findIdCategory } = require('../helpers/category.helpers')
 const categoryController = require('../controllers/category.controller')
 
 router.post('/', authentication, authorization, categoryController.postCategory)
-router.get('/', authentication, categoryController.getAllCategory)
+router.get('/', authentication, authorization, categoryController.getAllCategory)
 router.patch(
     '/:categoryId', 
     authentication, 

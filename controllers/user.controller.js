@@ -136,8 +136,9 @@ exports.topUp = async (req, res) => {
             returning: true
         })
         .then(results => {
+            const money = results[1][0].balance
             return res.status(200).send({
-                message: `Your balance has been successfully updated to Rp ${results[1][0].balance}`
+                message: `Your balance has been successfully updated to Rp ${money}`
                 // message: `Your balance has been successfully updated to Rp ${results}`
             })
         })
@@ -172,8 +173,6 @@ exports.deleteUser = async (req, res) => {
         });
     });
 }
-
-
 
 exports.usergetall = async(req, res) => {
     await User.findAll().then(result => {

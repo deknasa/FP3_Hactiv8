@@ -2,14 +2,14 @@ const express = require('express')
 const app = require('..')
 const router = express.Router()
 const authentication = require('../middleware/authentication').verify   
-// const authorization = require('../middleware/authorization').userAuthorization
+const { adminAuthorization, customerAuthorization } = require('../middleware/authorization')
 const { findDataProduct, checkProductStock } = require('../helpers/product.helpers')
 const transactionController = require('../controllers/transaction.controller')
 
 router.post(
     '/', 
     authentication, 
-    // authorization, 
+    customerAuthorization,
     findDataProduct,
     checkProductStock,
     transactionController.postTransaction
@@ -17,9 +17,20 @@ router.post(
 router.get(
     '/user',
     authentication,
-    // authorization,
-    transactionController.getTransactionsUser
+    customerAuthorization,
+    transactionController.getTransactionsByUser
 )
-
+router.get(
+    '/admin',
+    authentication,
+    adminAuthorization,
+    transactionController.getTransactionsByAdmin
+)
+router.get(
+    '/:transactionId',
+    authentication,
+    adminAuthorization,
+    transactionController.getTransactionIdByAdmin
+)
 
 module.exports = router

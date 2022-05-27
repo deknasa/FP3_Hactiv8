@@ -1,4 +1,5 @@
 const User = require("../models/index").User
+const Transaction = require('../models/index').TransactionHistory
 
 const userAuthorization = async(req, res, next) => {
     const user_id = req.id;
@@ -29,14 +30,27 @@ const userAuthorization = async(req, res, next) => {
 
 const adminAuthorization = (req, res, next) => {
     const role = req.role;
+    
     if (role != "admin") {
-        return res.status(401).json({ message: "only admin can acces categories" });
-    } else {
+        return res.status(401).json({ message: "only admin can access this menu !" });
+    } 
+    else {
         next()
     };
 };
 
+const customerAuthorization = (req, res, next) => {
+    const role = req.role;
+    if (role != "customer") {
+        return res.status(401).json({ message: "only customers can buy the product !" });
+    }
+    else {
+        next()
+    }
+}
+
 module.exports = {
     userAuthorization,
     adminAuthorization,
+    customerAuthorization,
 };

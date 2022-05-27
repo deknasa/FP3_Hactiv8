@@ -8,11 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       this.belongsTo(models.Product, {
-        as: "Products",
+        as: "Product",
         foreignKey: "product_id",
       });
       this.belongsTo(models.User, {
-          as: "Users",
+          as: "User",
           foreignKey: "user_id",
       });
     }

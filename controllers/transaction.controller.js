@@ -1,5 +1,3 @@
-const res = require('express/lib/response')
-
 const Transaction = require('../models/index').TransactionHistory
 const Product = require('../models/index').Product
 const User = require('../models/index').User
@@ -25,18 +23,16 @@ exports.postTransaction = async (req, res) => {
             Transaction.create({ product_id, user_id, total_price, quantity, })
             .then(() => {
                 const categoryId = product.category_id
-                const currentbalance = user.balance - total_price
-                const updatedStock = product.stock - quantity
-
-                Product.update({ stock: updatedStock }, { where: { id: product_id } }).then().catch();
-                User.update({balance: currentbalance}, { where: { id: user_id } }).then().catch()
+                user.balance = user.balance - total_price
+                product.stock = product.stock - quantity
+                product.save()
+                user.save()
                 Category.findOne({ where: { id: categoryId } })
                 .then((category) => {
-                    let sold_product_amount = category.sold_product_amount + quantity
-                    Category.update({ sold_product_amount }, { where: { id: categoryId } }).then().catch()
+                    category.sold_product_amount = category.sold_product_amount + quantity
+                    category.save()
                 })
                 .catch()
-
 
                 res.status(201).json({
                     message: "You hace succesfully purchase the product",
@@ -53,7 +49,7 @@ exports.postTransaction = async (req, res) => {
         })
         .catch(e => {
             console.log(e);
-            res.status(401).json({
+            res.status(503).json({
                 message: "SERVER ",
                 err: e.message
             })
@@ -68,17 +64,83 @@ exports.postTransaction = async (req, res) => {
     })   
 }
 
-exports.getTransactionsUser = async (req, res) => {
+exports.getTransactionsByUser = async (req, res) => {
     await Transaction.findAll({
         include: [{
             model: Product,
-            as: "Products",
+            as: "Product",
             attributes: ["id", "title", "price", "stock", "category_id"],
         }]
     })
     .then(transaction => {
+        // console.log(transaction[1]);
         return res.status(200).json({
-            transactionHistories: transaction
+            transactionHistories: 
+            transaction
+            // {
+            //     product_id: transaction[1].product_id,
+            //     user_id: transaction.user_id,
+            //     quantity: transaction.quantity,
+            //     total_price: transaction.total_price,
+            //     createdAt: transaction.createdAt,
+            //     updatedAt: transaction.updatedAt
+            // }
+        })
+    })
+    .catch(e => {
+        console.log(e);
+        res.status(503).send({
+            message: "INTERNAL SERVER ERROR",
+            error: e
+        })
+    })
+}
+
+exports.getTransactionsByAdmin = async(req, res) => {
+    await Transaction.findAll({
+        include: [{
+            model: Product,
+            as: "Product",
+            attributes: ["id", "title", "price", "stock", "category_id"]
+        },{
+            model: User,
+            as: "User",
+            attributes: ["id", "email", "balance", "gender", "role"]
+        }]
+    })
+    .then(transactions => {
+        return res.status(200).json({
+            transactionHistories: transactions
+        })
+    })
+    .catch(e => { 
+        res.status(503).json({
+            message: "INTERNAL SERVER ERROR", 
+            error: e.message
+        }) 
+    })
+}
+
+exports.getTransactionIdByAdmin = async(req, res) => {
+    const transactionId = req.params.transactionId
+
+    await Transaction.findOne({ where: {id: transactionId },
+        include: [{
+            model: Product,
+            as: "Product",
+            attributes: ["id", "title", "price", "stock", "category_id"],
+        }]
+    })
+    .then(transaction => {
+        return res.status(200).json({ 
+            transaction
+        })
+    })
+    .catch(e => {
+        console.log(e);
+        res.status(503).send({
+            message: "INTERNAL SERVER ERROR",
+            error: e
         })
     })
 }

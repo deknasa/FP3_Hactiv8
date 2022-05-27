@@ -46,17 +46,7 @@ exports.getAllProduct = async (req, res) => {
     await Product.findAll()
     .then(products => {
         return res.status(200).send({
-            products: 
-            products
-            // {
-            //     id: products.id,
-            //     title: products.title,
-            //     price: `Rp. ${products.price}`,
-            //     stock: products.stock,
-            //     category_id: products.category_id,
-            //     createdAt: products.createdAt,
-            //     updatedAt: products.updatedAt
-            // }
+            products: products
         })
     })
     .catch(e => {
@@ -79,7 +69,7 @@ exports.updateProduct = async (req, res) => {
     .then(product => {
         res.status(200).send({
             product: 
-            // product[1]
+            // product
             {
                 id: product[1][0].id,
                 title: product[1][0].title,

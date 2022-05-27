@@ -18,4 +18,9 @@ describe("Category Helpers Find Id Category", () => {
         await categoryHelpers.findIdCategory(req, res)
         expect(res.statusCode).toBe(400)
     })
+    it("should return next", async() => {
+        Category.findOne.mockResolvedValue({ category: "category" })
+        await categoryHelpers.findIdCategory(req, res)
+        expect(res.statusCode).toEqual(200);
+    })
 })
