@@ -6,10 +6,11 @@ const verify = (req, res, next) => {
     jwt.verify(token, secretKey, (err, decoded) => {
         if (err) {
             return res.status(401).send({
-                msg: err,
+                msg: err.message
             });
         }
         req.id = decoded.id;
+        req.role = decoded.role;
         next();
     });
 };

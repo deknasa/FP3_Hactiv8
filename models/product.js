@@ -4,19 +4,59 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Product extends Model {
-    /**
-     * Helper method for defining associations.
-     * This method is not a part of Sequelize lifecycle.
-     * The `models/index` file will call this method automatically.
-     */
+    
     static associate(models) {
       // define association here
     }
   }
   Product.init({
-    title: DataTypes.STRING,
-    price: DataTypes.INTEGER,
-    stock: DataTypes.INTEGER,
+    title: {
+      type: DataTypes.STRING,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "title is required"
+        },
+      }
+    },
+    price: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "price is required"
+        },
+        isInt: {
+          args: true,
+          msg: "price must be integer"
+        },
+        max: {
+          args: [50000000],
+          msg: "Maximum 100000000",
+        },
+        min: {
+          args: [0],
+          msg: "Minimum 0",
+        },
+      }
+    },
+    stock: {
+      type: DataTypes.INTEGER,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "stock is required"
+        },
+        isInt: {
+          args: true,
+          msg: "stock must be integer"
+        },
+        min: {
+          args: [5],
+          msg: "Minimum 5",
+        },
+      }
+    },
     category_id: DataTypes.INTEGER
   }, {
     sequelize,
