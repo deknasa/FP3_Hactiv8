@@ -1,5 +1,4 @@
 const User = require("../models/index").User
-const Transaction = require('../models/index').TransactionHistory
 
 const userAuthorization = async(req, res, next) => {
     const user_id = req.id;

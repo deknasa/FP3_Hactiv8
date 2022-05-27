@@ -4,7 +4,6 @@ const generateToken = require('../middleware/authentication').generateToken
 
 exports.register = async (req, res) => {
     const { full_name, password, gender, email } = req.body
-
     await User.findOne({
         where: {
             email: email
@@ -52,7 +51,6 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const { email, password } = req.body
-
     await User.findOne({
         where: {
             email: email
@@ -96,7 +94,6 @@ exports.updateUser = async (req, res) => {
         full_name: full_name,
         email: email
     }
-
     await User.update(dataUser, {
         where: { id: userId },
         returning: true
@@ -125,7 +122,6 @@ exports.updateUser = async (req, res) => {
 exports.topUp = async (req, res) => {
     const balance = req.body.balance
     const id = req.id
-
     await User.findOne({
         where: { id }
     })
@@ -159,7 +155,6 @@ exports.topUp = async (req, res) => {
 
 exports.deleteUser = async (req, res) => {
     const userId = req.params.userId
-
     await User.destroy({ where: { id: userId } })
     .then(() => {
         res.status(200).json({
@@ -175,11 +170,13 @@ exports.deleteUser = async (req, res) => {
 }
 
 exports.usergetall = async(req, res) => {
-    await User.findAll().then(result => {
+    await User.findAll()
+    .then(result => {
         res.status(200).json({
             result
         })
-    }).catch(error => {
+    })
+    .catch(error => {
         res.status(500).json({
             message: "INTERNAL SERVER ERROR",
             error: error.message

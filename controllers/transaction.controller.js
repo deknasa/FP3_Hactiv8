@@ -19,7 +19,6 @@ exports.postTransaction = async (req, res) => {
                     message: "saldo anda tidak cukup"
                 })
             }
-
             Transaction.create({ product_id, user_id, total_price, quantity, })
             .then(() => {
                 const categoryId = product.category_id
@@ -27,13 +26,14 @@ exports.postTransaction = async (req, res) => {
                 product.stock = product.stock - quantity
                 product.save()
                 user.save()
+
                 Category.findOne({ where: { id: categoryId } })
                 .then((category) => {
                     category.sold_product_amount = category.sold_product_amount + quantity
                     category.save()
                 })
                 .catch()
-
+                
                 res.status(201).json({
                     message: "You hace succesfully purchase the product",
                     transactionBil: { total_price, quantity, product_name: product.title }
@@ -73,7 +73,6 @@ exports.getTransactionsByUser = async (req, res) => {
         }]
     })
     .then(transaction => {
-        // console.log(transaction[1]);
         return res.status(200).json({
             transactionHistories: 
             transaction
