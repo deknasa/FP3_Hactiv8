@@ -6,7 +6,6 @@ module.exports = (sequelize, DataTypes) => {
   class TransactionHistory extends Model {
     
     static associate(models) {
-      // define association here
       this.belongsTo(models.Product, {
         as: "Product",
         foreignKey: "product_id",
