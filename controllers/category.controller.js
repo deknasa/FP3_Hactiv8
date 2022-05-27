@@ -3,7 +3,6 @@ const Product = require('../models/index').Product
 
 exports.postCategory = async (req, res) => {
     const type = req.body.type
-
     await Category.create({ type })
     .then(category => {
         res.status(201).json({
@@ -79,4 +78,3 @@ exports.deleteCategory = async (req, res) => {
         });
     });
 }
-

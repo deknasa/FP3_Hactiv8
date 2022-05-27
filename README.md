@@ -10,16 +10,29 @@ link heroku : https://fp3-hacktiv8.herokuapp.com/
 - delete user   : https://fp3-hacktiv8.herokuapp.com/users/:userId
 
 ## Category
+Endpoint category can only be accessed by admin
 - get all category by admin : https://fp3-hacktiv8.herokuapp.com/categories
 - post category by admin    : https://fp3-hacktiv8.herokuapp.com/categories
 - patch category            : https://fp3-hacktiv8.herokuapp.com/categories/:categoryId
 - delete category           : https://fp3-hacktiv8.herokuapp.com/categories/:categoryId
 
 ## Product
-#### get
- - https://toko-belanja.herokuapp.com/products/
+Endpoint product can only be accessed by admin EXCEPT Get All Product
+- post product      : https://fp3-hacktiv8.herokuapp.com/products
+- get all product   : https://fp3-hacktiv8.herokuapp.com/products
+- put data product  : https://fp3-hacktiv8.herokuapp.com/products/:productId
+- patch category_id on data product :
+                      https://fp3-hacktiv8.herokuapp.com/products/:productId
+- delete product    : https://fp3-hacktiv8.herokuapp.com/products/:productId
+
 ## Transaction
-#### get
- - https://toko-belanja.herokuapp.com/transactions/user
- - https://toko-belanja.herokuapp.com/transactions/admin
- 
+Admin Access
+ - get all transaction By Admin :
+                        https://fp3-hacktiv8.herokuapp.com/transactions/admin
+- get transaction id By Admn    :
+                        https://fp3-hacktiv8.herokuapp.com/transactions/:transactionId
+
+Customer Access
+- post transaction history      :
+                        https://fp3-hacktiv8.herokuapp.com/transactions
+- get transaction   : https://fp3-hacktiv8.herokuapp.com/transactions/user

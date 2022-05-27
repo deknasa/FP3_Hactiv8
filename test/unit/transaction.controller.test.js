@@ -15,6 +15,7 @@ beforeEach(() => {
 describe("Transaction Controller Post Transaction", () => {
     it("should return 200 saldo tidak cukup", async() => {
         Transaction.findOne.mockResolvedValue({ user: "user" })
+        Transaction.findOne.mockResolvedValue({ user: "user" })
 
         Transaction.create.mockResolvedValue({ product: "product" })
         await transactionController.postTransaction(req, res)

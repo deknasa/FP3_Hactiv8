@@ -1,9 +1,7 @@
 const Product = require("../models/index").Product
 
 const findIdProduct = (req, res, next) => {
-    const productId = req.params.productId;
-    // const product_Id = req.body.productId;
-    
+    const productId = req.params.productId;    
     Product.findOne({ where: { id: productId } })
     .then(result => {
         if (!result) {
@@ -19,7 +17,6 @@ const findIdProduct = (req, res, next) => {
 
 const findDataProduct = (req, res, next) => {
     const product_id = req.body.product_id;
-    
     Product.findOne({ where: { id: product_id } })
     .then(result => {
         if (!result) {
@@ -36,7 +33,6 @@ const findDataProduct = (req, res, next) => {
 const checkProductStock = (req, res, next) => {
     const quantity = req.body.quantity
     const product_id = req.body.product_id
-     
     Product.findOne({ where: {id: product_id } })
     .then(product => {
         const isBigger = quantity > product.stock
@@ -50,7 +46,6 @@ const checkProductStock = (req, res, next) => {
         }
     })
 }
-
 
 module.exports = {
     findIdProduct,
