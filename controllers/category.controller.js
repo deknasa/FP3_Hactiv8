@@ -63,7 +63,7 @@ exports.updateCategory = async(req, res) => {
 
 exports.deleteCategory = async (req, res) => {
     const categoryId = req.params.categoryId;
-
+    console.log(categoryId);
     await Category.destroy({ where: {id: categoryId} })
     .then(() => {
         res.status(200).json({

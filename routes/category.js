@@ -3,7 +3,7 @@ const app = require('..')
 const router = express.Router()
 const authentication = require('../middleware/authentication').verify   
 const authorization = require('../middleware/authorization').adminAuthorization
-const { findIdCategory } = require('../helpers/category.helpers')
+const { findIdCategory, checkProductBeforeDelete } = require('../helpers/category.helpers')
 const categoryController = require('../controllers/category.controller')
 
 router.post('/', authentication, authorization, categoryController.postCategory)
@@ -20,6 +20,7 @@ router.delete(
     authentication, 
     authorization, 
     findIdCategory, 
+    checkProductBeforeDelete,
     categoryController.deleteCategory
 )
 
